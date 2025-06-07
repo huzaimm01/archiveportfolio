@@ -552,50 +552,57 @@
     </div>
 
     <script>
-        const pages = document.querySelectorAll('.page');
-        const navLinks = document.querySelectorAll('.nav-link');
+       const pages = document.querySelectorAll('.page');
+const navLinks = document.querySelectorAll('.nav-link');
 
-        function showPage(pageId) {
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-            });
-            
-            document.getElementById(pageId).classList.add('active');
-            
-            const activeNavLink = [...navLinks].find(link => 
-                link.textContent.toLowerCase() === pageId.toLowerCase()
-            );
-            if (activeNavLink) {
-                activeNavLink.classList.add('active');
-            }
-        }
+function showPage(pageId) {
+    pages.forEach(page => {
+        page.classList.remove('active');
+    });
 
-        function showMarketingWork() {
-            document.getElementById('work').classList.remove('active');
-            document.getElementById('marketing-work').classList.add('active');
-        }
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+    });
 
-        function showPersonalWork() {
-            document.getElementById('work').classList.remove('active');
-            document.getElementById('personal-work').classList.add('active');
-            loadGallery();
-        }
+    document.getElementById(pageId).classList.add('active');
 
-        function toggleTheme() {
-            const body = document.body;
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', newTheme);
-            
-            const toggle = document.querySelector('.theme-toggle');
-            toggle.textContent = newTheme === 'dark' ? '☀' : '🌙';
-        }
+    const activeNavLink = [...navLinks].find(link =>
+        link.textContent.toLowerCase() === pageId.toLowerCase()
+    );
+    if (activeNavLink) {
+        activeNavLink.classList.add('active');
+    }
+}
 
-        async function loadGallery() {
+function showMarketingWork() {
+    document.getElementById('work').classList.remove('active');
+    document.getElementById('marketing-work').classList.add('active');
+}
+
+function showPersonalWork() {
+    document.getElementById('work').classList.remove('active');
+    document.getElementById('personal-work').classList.add('active');
+    loadGallery();
+}
+
+function toggleTheme() {
+    const body = document.body;
+    const currentTheme = body.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    body.setAttribute('data-theme', newTheme);
+
+    const toggle = document.querySelector('.theme-toggle');
+    toggle.textContent = newTheme === 'dark' ? '☀' : '🌙';
+
+    document.cookie = `theme=${newTheme}; path=/; max-age=${30 * 24 * 60 * 60}`;
+}
+
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+}
+
+async function loadGallery() {
     const gallery = document.getElementById('photo-gallery');
     gallery.innerHTML = `
         <div class="loading">
@@ -649,37 +656,43 @@
     }
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    createStars();
 
+    const savedTheme = getCookie('theme');
+    if (savedTheme) {
+        document.body.setAttribute('data-theme', savedTheme);
+        const toggle = document.querySelector('.theme-toggle');
+        toggle.textContent = savedTheme === 'dark' ? '☀' : '🌙';
+    }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            createStars();
-            
-            const workCards = document.querySelectorAll('.work-card');
-            workCards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(30px)';
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, 300 + index * 200);
-            });
-        });
+    const workCards = document.querySelectorAll('.work-card');
+    workCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 300 + index * 200);
+    });
+});
 
-        function createStars() {
-            const starsContainer = document.createElement('div');
-            starsContainer.className = 'stars';
-            document.body.appendChild(starsContainer);
+function createStars() {
+    const starsContainer = document.createElement('div');
+    starsContainer.className = 'stars';
+    document.body.appendChild(starsContainer);
 
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 3 + 's';
-                starsContainer.appendChild(star);
-            }
-        }
+    for (let i = 0; i < 100; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        starsContainer.appendChild(star);
+    }
+}
+
     </script>
 </body>
 </html>
